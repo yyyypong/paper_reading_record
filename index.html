@@ -12,81 +12,177 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: #fff;
-            color: #000;
-            padding: 40px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Arial', sans-serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        h2 {
-            font-size: 18px;
-            font-weight: normal;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 80px 40px;
+        }
+
+        .header {
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .site-title {
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #666;
+            font-weight: 400;
         }
 
         .section {
-            margin-bottom: 60px;
+            margin-bottom: 100px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        .section:last-child {
+            animation-delay: 0.3s;
+        }
+
+        .section-title {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e5e5;
+            font-weight: 500;
         }
 
         .paper-item {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
+            padding: 20px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .paper-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.02), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .paper-item:hover::before {
+            left: 100%;
+        }
+
+        .paper-item:hover {
+            padding-left: 10px;
         }
 
         .checkbox {
-            width: 16px;
-            height: 16px;
-            border: 1px solid #000;
-            margin-right: 12px;
-            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid #ccc;
+            margin-right: 20px;
+            margin-top: 2px;
             cursor: pointer;
             flex-shrink: 0;
             position: relative;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .checkbox:hover {
+            border-color: #666;
+            transform: scale(1.05);
+        }
+
+        .checkbox.checked {
+            background: #1a1a1a;
+            border-color: #1a1a1a;
         }
 
         .checkbox.checked::after {
             content: '';
             position: absolute;
-            left: 3px;
-            top: 0;
-            width: 6px;
-            height: 10px;
-            border: solid #000;
+            left: 5px;
+            top: 2px;
+            width: 5px;
+            height: 9px;
+            border: solid #fff;
             border-width: 0 2px 2px 0;
             transform: rotate(45deg);
+            opacity: 0;
+            animation: checkIn 0.3s ease forwards;
         }
 
         .paper-text {
             flex: 1;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            transition: all 0.3s ease;
         }
 
         .completed .paper-text {
-            color: #999;
+            color: #aaa;
+        }
+
+        .completed .checkbox {
+            border-color: #ddd;
+            background: #f5f5f5;
         }
 
         .completed .checkbox::after {
-            border-color: #999;
+            border-color: #bbb;
         }
 
         .add-button {
-            background: #000;
-            color: #fff;
-            border: none;
-            padding: 8px 20px;
+            background: transparent;
+            color: #1a1a1a;
+            border: 1.5px solid #1a1a1a;
+            padding: 12px 30px;
             cursor: pointer;
-            font-size: 14px;
-            margin-top: 20px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 40px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .add-button:hover::before {
+            left: 0;
         }
 
         .add-button:hover {
-            background: #333;
+            color: #fff;
+            transform: translateY(-2px);
         }
 
         .modal {
@@ -96,79 +192,120 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
             z-index: 1000;
-            padding: 40px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
         }
 
         .modal-content {
-            max-width: 500px;
-            margin: 100px auto;
+            max-width: 480px;
+            margin: 10vh auto;
             background: #fff;
-            padding: 30px;
-            border: 1px solid #000;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
         }
 
         .modal h3 {
-            font-size: 16px;
-            margin-bottom: 20px;
-            font-weight: normal;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            font-weight: 500;
+            color: #666;
         }
 
         .modal input, .modal textarea {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #000;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border: none;
+            border-bottom: 1px solid #e5e5e5;
             font-family: inherit;
             font-size: 14px;
+            background: transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .modal input:focus, .modal textarea:focus {
+            outline: none;
+            border-color: #1a1a1a;
         }
 
         .modal textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
 
         .modal-buttons {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             justify-content: flex-end;
+            margin-top: 40px;
         }
 
         .modal button {
-            background: #000;
-            color: #fff;
-            border: none;
-            padding: 8px 20px;
+            background: transparent;
+            color: #1a1a1a;
+            border: 1px solid #1a1a1a;
+            padding: 10px 25px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
         .modal button:hover {
-            background: #333;
+            background: #1a1a1a;
+            color: #fff;
         }
 
         .modal .cancel-button {
-            background: #fff;
-            color: #000;
-            border: 1px solid #000;
+            border-color: #ccc;
+            color: #666;
         }
 
         .modal .cancel-button:hover {
-            background: #f5f5f5;
+            border-color: #999;
+            background: #999;
+            color: #fff;
         }
 
         .error {
-            color: #d00;
-            font-size: 14px;
-            margin-top: -10px;
-            margin-bottom: 10px;
+            color: #c00;
+            font-size: 12px;
+            margin-top: -20px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 0.3s ease forwards;
         }
 
-        @keyframes slideDown {
+        .empty-state {
+            text-align: center;
+            padding: 60px 0;
+            color: #ccc;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -176,32 +313,105 @@
             }
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes checkIn {
+            from {
+                opacity: 0;
+                transform: rotate(45deg) scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: rotate(45deg) scale(1);
+            }
+        }
+
+        @keyframes slideMove {
+            0% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            50% {
+                opacity: 0.5;
+                transform: translateX(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
         .paper-item.moving {
-            animation: slideDown 0.3s ease;
+            animation: slideMove 0.5s ease;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 60px 30px;
+            }
+            
+            .modal-content {
+                padding: 40px 30px;
+                margin: 5vh 20px;
+            }
+        }
+
+        /* 细节优化 */
+        ::selection {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f5f5f5;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            transition: background 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999;
         }
     </style>
 </head>
 <body>
-    <div class="section">
-        <h2>计划阅读</h2>
-        <div id="pending-papers"></div>
-        <button class="add-button" onclick="showAddModal()">添加论文</button>
+    <div class="container">
+        <div class="header">
+            <h1 class="site-title">Reading List</h1>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">To Read</h2>
+            <div id="pending-papers"></div>
+            <button class="add-button" onclick="showAddModal()">Add Paper</button>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Completed</h2>
+            <div id="completed-papers"></div>
+        </div>
     </div>
 
-    <div class="section">
-        <h2>已完成</h2>
-        <div id="completed-papers"></div>
-    </div>
-
-    <div id="modal" class="modal">
+    <div id="modal" class="modal" onclick="handleModalClick(event)">
         <div class="modal-content">
-            <h3>添加新论文</h3>
-            <input type="password" id="password" placeholder="请输入密码">
+            <h3>Add New Paper</h3>
+            <input type="password" id="password" placeholder="Password">
             <div id="error-message" class="error"></div>
-            <textarea id="paper-content" placeholder="请输入论文信息（标题、作者、链接等）"></textarea>
+            <textarea id="paper-content" placeholder="Paper details (title, authors, link, notes...)"></textarea>
             <div class="modal-buttons">
-                <button class="cancel-button" onclick="hideModal()">取消</button>
-                <button onclick="addPaper()">添加</button>
+                <button class="cancel-button" onclick="hideModal()">Cancel</button>
+                <button onclick="addPaper()">Add</button>
             </div>
         </div>
     </div>
@@ -218,20 +428,37 @@
             pendingContainer.innerHTML = '';
             completedContainer.innerHTML = '';
             
-            papers.forEach((paper, index) => {
-                const paperDiv = document.createElement('div');
-                paperDiv.className = `paper-item ${paper.completed ? 'completed' : ''}`;
-                paperDiv.innerHTML = `
-                    <div class="checkbox ${paper.completed ? 'checked' : ''}" onclick="togglePaper(${index})"></div>
-                    <div class="paper-text">${escapeHtml(paper.content)}</div>
-                `;
-                
-                if (paper.completed) {
-                    completedContainer.appendChild(paperDiv);
-                } else {
+            const pendingPapers = papers.filter(p => !p.completed);
+            const completedPapers = papers.filter(p => p.completed);
+            
+            if (pendingPapers.length === 0) {
+                pendingContainer.innerHTML = '<div class="empty-state">No papers in queue</div>';
+            } else {
+                pendingPapers.forEach((paper, index) => {
+                    const paperDiv = createPaperElement(paper, papers.indexOf(paper));
                     pendingContainer.appendChild(paperDiv);
-                }
-            });
+                });
+            }
+            
+            if (completedPapers.length === 0) {
+                completedContainer.innerHTML = '<div class="empty-state">No completed papers</div>';
+            } else {
+                completedPapers.forEach((paper, index) => {
+                    const paperDiv = createPaperElement(paper, papers.indexOf(paper));
+                    completedContainer.appendChild(paperDiv);
+                });
+            }
+        }
+        
+        // 创建论文元素
+        function createPaperElement(paper, index) {
+            const paperDiv = document.createElement('div');
+            paperDiv.className = `paper-item ${paper.completed ? 'completed' : ''}`;
+            paperDiv.innerHTML = `
+                <div class="checkbox ${paper.completed ? 'checked' : ''}" onclick="togglePaper(${index})"></div>
+                <div class="paper-text">${escapeHtml(paper.content)}</div>
+            `;
+            return paperDiv;
         }
         
         // 切换论文状态
@@ -252,16 +479,28 @@
         
         // 显示添加模态框
         function showAddModal() {
-            document.getElementById('modal').style.display = 'block';
+            const modal = document.getElementById('modal');
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('show'), 10);
             document.getElementById('password').value = '';
             document.getElementById('paper-content').value = '';
             document.getElementById('error-message').textContent = '';
+            document.getElementById('error-message').style.opacity = '0';
             document.getElementById('password').focus();
         }
         
         // 隐藏模态框
         function hideModal() {
-            document.getElementById('modal').style.display = 'none';
+            const modal = document.getElementById('modal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+        
+        // 处理模态框点击
+        function handleModalClick(event) {
+            if (event.target === event.currentTarget) {
+                hideModal();
+            }
         }
         
         // 添加新论文
@@ -271,12 +510,14 @@
             const errorMsg = document.getElementById('error-message');
             
             if (password !== '040929') {
-                errorMsg.textContent = '密码错误';
+                errorMsg.textContent = 'Invalid password';
+                errorMsg.style.opacity = '1';
                 return;
             }
             
             if (!content) {
-                errorMsg.textContent = '请输入论文信息';
+                errorMsg.textContent = 'Please enter paper information';
+                errorMsg.style.opacity = '1';
                 return;
             }
             
@@ -298,17 +539,16 @@
             return div.innerHTML;
         }
         
-        // 点击模态框外部关闭
-        document.getElementById('modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideModal();
-            }
-        });
-        
         // Enter 键提交
         document.getElementById('paper-content').addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && e.ctrlKey) {
                 addPaper();
+            }
+        });
+        
+        document.getElementById('password').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('paper-content').focus();
             }
         });
         
