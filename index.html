@@ -13,10 +13,16 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Arial', sans-serif;
-            background: #fafafa;
+            background: #fff;
             color: #1a1a1a;
             min-height: 100vh;
             overflow-x: hidden;
+        }
+
+        .main-content {
+            background: #fff;
+            min-height: 100vh;
+            padding-bottom: 100px;
         }
 
         .container {
@@ -127,6 +133,14 @@
             animation: checkIn 0.3s ease forwards;
         }
 
+        .paper-content-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
         .paper-text {
             flex: 1;
             font-size: 15px;
@@ -135,8 +149,20 @@
             transition: all 0.3s ease;
         }
 
+        .paper-time {
+            font-size: 12px;
+            color: #999;
+            white-space: nowrap;
+            margin-top: 3px;
+            font-variant-numeric: tabular-nums;
+        }
+
         .completed .paper-text {
             color: #aaa;
+        }
+
+        .completed .paper-time {
+            color: #ccc;
         }
 
         .completed .checkbox {
@@ -183,6 +209,124 @@
         .add-button:hover {
             color: #fff;
             transform: translateY(-2px);
+        }
+
+        /* 评论区样式 - 独立且弱化 */
+        .comments-wrapper {
+            background: #f8f8f8;
+            border-top: 1px solid #e5e5e5;
+            margin-top: 150px;
+        }
+
+        .comments-container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .comments-section {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        .comments-section .section-title {
+            font-size: 10px;
+            color: #bbb;
+            border-bottom-color: #eee;
+        }
+
+        .comment-form {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #fff;
+            border: 1px solid #eee;
+        }
+
+        .comment-input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .comment-input, .comment-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e5e5e5;
+            font-family: inherit;
+            font-size: 13px;
+            background: #fafafa;
+            transition: all 0.3s ease;
+        }
+
+        .comment-input:focus, .comment-textarea:focus {
+            outline: none;
+            border-color: #999;
+            background: #fff;
+        }
+
+        .comment-input {
+            flex: 1;
+        }
+
+        .comment-textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .submit-comment {
+            background: #f5f5f5;
+            color: #666;
+            border: 1px solid #ddd;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .submit-comment:hover {
+            background: #eee;
+            border-color: #bbb;
+            color: #333;
+        }
+
+        .comments-list {
+            margin-top: 30px;
+        }
+
+        .comment-item {
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #fff;
+            border: 1px solid #eee;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            align-items: baseline;
+        }
+
+        .comment-author {
+            font-size: 13px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .comment-time {
+            font-size: 11px;
+            color: #bbb;
+        }
+
+        .comment-content {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #888;
         }
 
         .modal {
@@ -302,6 +446,11 @@
             text-transform: uppercase;
         }
 
+        .comments-list .empty-state {
+            padding: 40px 0;
+            font-size: 12px;
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -350,13 +499,31 @@
 
         /* 响应式设计 */
         @media (max-width: 600px) {
-            .container {
+            .container, .comments-container {
                 padding: 60px 30px;
             }
             
             .modal-content {
                 padding: 40px 30px;
                 margin: 5vh 20px;
+            }
+
+            .paper-content-wrapper {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .paper-time {
+                align-self: flex-start;
+                font-size: 11px;
+            }
+
+            .comment-input-group {
+                flex-direction: column;
+            }
+
+            .comment-form {
+                padding: 20px;
             }
         }
 
@@ -386,20 +553,39 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1 class="site-title">Reading List</h1>
-        </div>
+    <div class="main-content">
+        <div class="container">
+            <div class="header">
+                <h1 class="site-title">Reading List</h1>
+            </div>
 
-        <div class="section">
-            <h2 class="section-title">To Read</h2>
-            <div id="pending-papers"></div>
-            <button class="add-button" onclick="showAddModal()">Add Paper</button>
-        </div>
+            <div class="section">
+                <h2 class="section-title">To Read</h2>
+                <div id="pending-papers"></div>
+                <button class="add-button" onclick="showAddModal()">Add Paper</button>
+            </div>
 
-        <div class="section">
-            <h2 class="section-title">Completed</h2>
-            <div id="completed-papers"></div>
+            <div class="section">
+                <h2 class="section-title">Completed</h2>
+                <div id="completed-papers"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="comments-wrapper">
+        <div class="comments-container">
+            <div class="comments-section">
+                <h2 class="section-title">Visitor Comments</h2>
+                <div class="comment-form">
+                    <div class="comment-input-group">
+                        <input type="text" class="comment-input" id="comment-name" placeholder="Your name">
+                        <input type="email" class="comment-input" id="comment-email" placeholder="Email (optional)">
+                    </div>
+                    <textarea class="comment-textarea" id="comment-content" placeholder="Leave a comment..."></textarea>
+                    <button class="submit-comment" onclick="submitComment()">Submit</button>
+                </div>
+                <div class="comments-list" id="comments-list"></div>
+            </div>
         </div>
     </div>
 
@@ -419,6 +605,38 @@
     <script>
         // 从 localStorage 加载数据
         let papers = JSON.parse(localStorage.getItem('papers')) || [];
+        let comments = JSON.parse(localStorage.getItem('comments')) || [];
+        
+        // 格式化时间
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            
+            // 小于1分钟
+            if (diff < 60000) {
+                return 'Just now';
+            }
+            // 小于1小时
+            if (diff < 3600000) {
+                const minutes = Math.floor(diff / 60000);
+                return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+            }
+            // 小于24小时
+            if (diff < 86400000) {
+                const hours = Math.floor(diff / 3600000);
+                return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            }
+            // 小于7天
+            if (diff < 604800000) {
+                const days = Math.floor(diff / 86400000);
+                return `${days} day${days > 1 ? 's' : ''} ago`;
+            }
+            
+            // 显示具体日期
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+        }
         
         // 渲染论文列表
         function renderPapers() {
@@ -454,9 +672,16 @@
         function createPaperElement(paper, index) {
             const paperDiv = document.createElement('div');
             paperDiv.className = `paper-item ${paper.completed ? 'completed' : ''}`;
+            
+            // 显示添加时间或完成时间
+            const displayTime = paper.completed && paper.completedAt ? paper.completedAt : paper.addedAt;
+            
             paperDiv.innerHTML = `
                 <div class="checkbox ${paper.completed ? 'checked' : ''}" onclick="togglePaper(${index})"></div>
-                <div class="paper-text">${escapeHtml(paper.content)}</div>
+                <div class="paper-content-wrapper">
+                    <div class="paper-text">${escapeHtml(paper.content)}</div>
+                    <div class="paper-time">${formatDate(displayTime)}</div>
+                </div>
             `;
             return paperDiv;
         }
@@ -464,6 +689,15 @@
         // 切换论文状态
         function togglePaper(index) {
             papers[index].completed = !papers[index].completed;
+            
+            // 更新完成时间
+            if (papers[index].completed) {
+                papers[index].completedAt = new Date().toISOString();
+            } else {
+                // 取消完成时删除完成时间
+                delete papers[index].completedAt;
+            }
+            
             localStorage.setItem('papers', JSON.stringify(papers));
             
             // 添加动画效果
@@ -532,6 +766,55 @@
             hideModal();
         }
         
+        // 提交评论
+        function submitComment() {
+            const name = document.getElementById('comment-name').value.trim();
+            const email = document.getElementById('comment-email').value.trim();
+            const content = document.getElementById('comment-content').value.trim();
+            
+            if (!name || !content) {
+                alert('Please enter your name and comment');
+                return;
+            }
+            
+            const comment = {
+                name: name,
+                email: email,
+                content: content,
+                timestamp: new Date().toISOString()
+            };
+            
+            comments.unshift(comment);
+            localStorage.setItem('comments', JSON.stringify(comments));
+            
+            // 清空表单
+            document.getElementById('comment-name').value = '';
+            document.getElementById('comment-email').value = '';
+            document.getElementById('comment-content').value = '';
+            
+            renderComments();
+        }
+        
+        // 渲染评论列表
+        function renderComments() {
+            const commentsList = document.getElementById('comments-list');
+            
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<div class="empty-state">No comments yet</div>';
+                return;
+            }
+            
+            commentsList.innerHTML = comments.map(comment => `
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div class="comment-author">${escapeHtml(comment.name)}</div>
+                        <div class="comment-time">${formatDate(comment.timestamp)}</div>
+                    </div>
+                    <div class="comment-content">${escapeHtml(comment.content)}</div>
+                </div>
+            `).join('');
+        }
+        
         // HTML 转义
         function escapeHtml(text) {
             const div = document.createElement('div');
@@ -552,8 +835,21 @@
             }
         });
         
+        document.getElementById('comment-content').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                submitComment();
+            }
+        });
+        
         // 初始渲染
         renderPapers();
+        renderComments();
+        
+        // 定期更新时间显示
+        setInterval(() => {
+            renderPapers();
+            renderComments();
+        }, 60000); // 每分钟更新一次
     </script>
 </body>
 </html>
